@@ -39,7 +39,7 @@ class AuthController extends Controller
             ], 401);
         };
 
-        $token = $user->crateToken('auth_token')->plainTextToken;
+        $token = $user->createToken('auth_token')->plainTextToken;
 
         return [
             'user' => $user,

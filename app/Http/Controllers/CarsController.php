@@ -65,6 +65,6 @@ class CarsController extends Controller
      */
     public function search(string $name)
     {
-        return Cars::where('name', 'like', '%'.$name.'%')->get();
+        return Cars::where('carModel', 'like', '%'.$name.'%')->get();
     }
 }

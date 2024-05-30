@@ -8,10 +8,7 @@ use Illuminate\Support\Facades\Route;
 Route::resource('cars', CarsController::class);
 
 //search cars
-Route::get('/cars/search/{name}', [CarsController::class, 'search']);
+Route::get('/cars/search/{name}', [CarsController::class, 'search'])->middleware('auth:sanctum');
 
 //register
 Route::post('/register', [AuthController::class, 'register']);
-
-//login
-Route::post('/login', [AuthController::class, 'login']);

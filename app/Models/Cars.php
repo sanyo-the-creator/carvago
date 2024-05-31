@@ -12,10 +12,15 @@ class Cars extends Model
     protected $fillable = [
         'carModel',
         'tags',
+        'src',
         'available',
         'description',
         'rental_price_per_day',
         'user_id',
-        'location_id'
+        'location'
     ];
+
+    public function user() {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

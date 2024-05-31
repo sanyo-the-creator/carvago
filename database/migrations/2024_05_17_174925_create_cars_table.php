@@ -15,14 +15,15 @@ return new class extends Migration
             $table->id();
             $table->string('carModel');
             $table->string('tags');
+            $table->string('src');
             $table->boolean('available')->default(true);
             $table->text('description')->nullable();
             $table->decimal('rental_price_per_day', 8, 2);
+            $table->string('location');
             $table->timestamps();
 
             //realtion values
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('location_id')->onDelete('set null');
         });
     }
 

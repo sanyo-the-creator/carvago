@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cars;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CarsController extends Controller
 {
@@ -20,14 +21,16 @@ class CarsController extends Controller
      */
     public function store(Request $request)
     {
+        $user = Auth()->user();
         $request->validate([
             'carModel' => 'required',
             'tags' => 'required',
+            'src' => 'required',
             'available' => 'required',
             'description' => 'required',
             'rental_price_per_day' => 'required',
-            'user_id' => 'required',
-            'location_id' => 'required'
+            'user_id' => $user->id,
+            'location' => 'required'
         ]);
 
         return Cars::create($request->all());

@@ -9,7 +9,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('/cars', [CarsController::class, 'index']);
 
 //add listing
-Route::post('/cars/create', [CarsController::class, 'store'])->middleware('auth:sanctum');
+Route::post('/cars', [CarsController::class, 'store'])->middleware('auth:sanctum');
+
+//update listing
+Route::put('/cars/{car}/edit', [CarsController::class, 'update'])->middleware('auth:sanctum');
 
 //search cars
 Route::get('/cars/search/{name}', [CarsController::class, 'search'])->middleware('auth:sanctum');

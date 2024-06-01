@@ -22,18 +22,21 @@ class CarsController extends Controller
     public function store(Request $request)
     {
         $user = Auth()->user();
-        $request->validate([
+        $carData = $request->validate([
             'carModel' => 'required',
             'tags' => 'required',
             'src' => 'required',
             'available' => 'required',
             'description' => 'required',
             'rental_price_per_day' => 'required',
-            'user_id' => $user->id,
             'location' => 'required'
         ]);
 
-        return Cars::create($request->all());
+        $carData['user_id'] = $user->id;
+
+        $car = Cars::create($carData);
+
+        return response()->json($car, 201);
     }
 
     /**
@@ -47,12 +50,21 @@ class CarsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Cars $cars)
     {
-        $car = Cars::find($id);
-        $car->update($request->all());
+        $carData = $request->validate([
+            'carModel' => 'required',
+            'tags' => 'required',
+            'src' => 'required',
+            'available' => 'required',
+            'description' => 'required',
+            'rental_price_per_day' => 'required',
+            'location' => 'required'
+        ]);
 
-        return $car;
+        $updatedCar = $cars->create($carData);
+
+        return response()->json($updatedCar, 201);
     }
 
     /**

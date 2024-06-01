@@ -52,6 +52,7 @@ class CarsController extends Controller
      */
     public function update(Request $request, Cars $cars)
     {
+        $user = Auth()->user();
         $carData = $request->validate([
             'carModel' => 'required',
             'tags' => 'required',
@@ -61,6 +62,7 @@ class CarsController extends Controller
             'rental_price_per_day' => 'required',
             'location' => 'required'
         ]);
+        $carData['user_id'] = $user->id;
 
         $updatedCar = $cars->create($carData);
 

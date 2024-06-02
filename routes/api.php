@@ -14,8 +14,14 @@ Route::post('/cars', [CarsController::class, 'store'])->middleware('auth:sanctum
 //update listing
 Route::put('/cars/{car}/edit', [CarsController::class, 'update'])->middleware('auth:sanctum');
 
+//delete listing
+Route::delete('/cars/{car}', [CarsController::class, 'destroy'])->middleware('auth:sanctum');
+
 //search cars
 Route::get('/cars/search/{name}', [CarsController::class, 'search'])->middleware('auth:sanctum');
+
+//get user cars
+Route::get('/cars', [CarsController::class, 'myCars'])->middleware('auth:sanctum');
 
 //register
 Route::post('/register', [AuthController::class, 'register']);

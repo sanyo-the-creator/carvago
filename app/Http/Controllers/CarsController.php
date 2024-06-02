@@ -13,7 +13,7 @@ class CarsController extends Controller
      */
     public function index()
     {
-        return Cars::all();
+        return Cars::all()->paginate(10);
     }
 
     /**
@@ -50,31 +50,44 @@ class CarsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Cars $cars)
+    public function update(Request $request, Cars $car)
     {
         $user = Auth()->user();
-        $carData = $request->validate([
-            'carModel' => 'required',
-            'tags' => 'required',
-            'src' => 'required',
-            'available' => 'required',
-            'description' => 'required',
-            'rental_price_per_day' => 'required',
-            'location' => 'required'
-        ]);
-        $carData['user_id'] = $user->id;
 
-        $updatedCar = $cars->create($carData);
-
-        return response()->json($updatedCar, 201);
+        if($car->user_id == $user->id) {
+            $carData = $request->validate([
+                'carModel' => 'required',
+                'tags' => 'required',
+                'src' => 'required',
+                'available' => 'required',
+                'description' => 'required',
+                'rental_price_per_day' => 'required',
+                'location' => 'required'
+            ]);
+            $carData['user_id'] = $user->id;
+    
+            $updatedCar = $car->create($carData);
+    
+            return response()->json($updatedCar, 201);
+        }
+        abort(403, 'Unauthorized');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Cars $car)
     {
-        return Cars::destroy($id);
+        if($car->user_id == Auth()->id()) {
+            $deletedCar = $car->carModel;
+
+            $car->delete();
+            return response()->json([
+                'message'=> 'deleted succesfully',
+                'deleted car'=> $deletedCar
+            ], 200);
+        }
+        abort(403, 'Unauthorized');
     }
 
         /**
@@ -83,5 +96,13 @@ class CarsController extends Controller
     public function search(string $name)
     {
         return Cars::where('carModel', 'like', '%'.$name.'%')->get();
+    }
+
+
+    //show users cars
+    public function myCars() {
+        $user = Auth()->user();
+        $cars = Cars::where('user_id', $user->id)->paginate(2);
+        return response()->json($cars, 200);
     }
 }
